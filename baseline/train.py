@@ -22,6 +22,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
 
 from baseline.img_utils import get_random_eraser, crop_generator
+from utils.const import PROJECT_ROOT_PATH, DATASET_ROOT_PATH
 
 
 def load_mix_data(LIST, TRAIN):
@@ -119,29 +120,29 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     train_datagen = ImageDataGenerator(
         shear_range=0.2, width_shift_range=0.2, height_shift_range=0.2,
         horizontal_flip=0.5).flow(
-        images[:train_cnt//10*9], labels[:train_cnt//10*9], batch_size=batch_size)
+        images[:train_cnt // 10 * 9], labels[:train_cnt // 10 * 9], batch_size=batch_size)
 
     # train_datagen = ImageDataGenerator().flow(
     #     images[:train_cnt//10*9], labels[:train_cnt//10*9], batch_size=batch_size)
-    val_datagen = ImageDataGenerator(horizontal_flip=0.5).flow(images[train_cnt//10*9:], labels[train_cnt//10*9:], batch_size=batch_size)
-
+    val_datagen = ImageDataGenerator(horizontal_flip=0.5).flow(images[train_cnt // 10 * 9:],
+                                                               labels[train_cnt // 10 * 9:], batch_size=batch_size)
 
     save_best = ModelCheckpoint(target_model_path, monitor='val_acc', save_best_only=True)
     net.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
     net.fit_generator(
         train_datagen,
-        steps_per_epoch=train_cnt/20 * 19 / batch_size + 1, epochs=40,
+        steps_per_epoch=train_cnt / 20 * 19 / batch_size + 1, epochs=40,
         validation_data=val_datagen,
-        validation_steps=train_cnt/20/batch_size+1,
+        validation_steps=train_cnt / 20 / batch_size + 1,
         callbacks=[save_best]
     )
     net.save(target_model_path)
 
 
-def softmax_pretrain_on_dataset(source, project_path='/home/cwh/coding/rank-reid', dataset_parent='/home/cwh/coding'):
+def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_parent=DATASET_ROOT_PATH):
     if source == 'market':
         train_list = project_path + '/dataset/market_train.list'
-        train_dir = dataset_parent + '/Market-1501/train'
+        train_dir = dataset_parent + '/Market-1501-v15.09.15/_rerank/train'
         class_count = 751
     elif source == 'grid':
         train_list = project_path + '/dataset/grid_train.list'
