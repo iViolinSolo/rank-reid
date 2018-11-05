@@ -102,9 +102,10 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     n_epoch = 40
 
     images, labels = load_data(train_list, train_dir)
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
-
     sess = tf.Session(config=config)
     set_session(sess)
 
