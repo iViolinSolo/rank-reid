@@ -13,6 +13,7 @@ from keras.preprocessing import image
 
 from transfer.sep_bn_mix_rank_transfer import cross_entropy_loss
 from utils.file_helper import write, safe_remove
+from utils.hparams import img_width, img_height
 
 
 def extract_info(dir_path):
@@ -55,7 +56,7 @@ def extract_feature(dir_path, net):
         else:
             continue
         image_path = os.path.join(dir_path, image_name)
-        img = image.load_img(image_path, target_size=(224, 224))
+        img = image.load_img(image_path, target_size=(img_height, img_width))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
