@@ -278,15 +278,15 @@ if __name__ == '__main__':
     source = 'market'
     target = 'market'
     net = load_model('../pretrain/' + source + '_multi_pretrain.h5')
-    # print(net.to_json())
-    target_path = '/home/cwh/coding/Market-1501'
+    print(net.to_json())
+    target_path = '/home/xmh/dataset/Market-1501-v15.09.15/_rerank'
     probe_path = target_path + '/probe'
     gallery_path = target_path + '/test'
     train_path = target_path + '/train'
     pid_path = 'ret_train_pid.txt'
     score_path = 'ret_train_score.txt'
     # train_predict(net, train_path, pid_path, score_path)
-    test_predict(net, probe_path, gallery_path,  pid_path, score_path)
+    test_predict(net, probe_path, gallery_path, pid_path, score_path)
     market_result_eval(pid_path, 'market_eval.txt', gallery_path, probe_path)
 
     # if eval on grid, use grid_result_eval
