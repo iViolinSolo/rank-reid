@@ -82,7 +82,7 @@ def load_data(LIST, TRAIN):
             labels.append(label_cnt)
 
     img_cnt = len(labels)
-    shuffle_idxes = range(img_cnt)
+    shuffle_idxes = list(range(img_cnt))
     shuffle(shuffle_idxes)
     shuffle_imgs = list()
     shuffle_labels = list()
