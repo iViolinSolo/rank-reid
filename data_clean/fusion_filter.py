@@ -23,7 +23,7 @@ if __name__ == '__main__':
     sort_deltas = delta_matrix_top[sort_score_idx_s]
     sort_pids = pid_matrix_top[sort_score_idx_s]
     for i in range(50):
-        print '%d vs %d = %d, delta score: %4f' % (sort_score_idx_s[i], sort_pids[i], sort_pids[i] - sort_score_idx_s[i] == 775, sort_deltas[i])
+        print('%d vs %d = %d, delta score: %4f' % (sort_score_idx_s[i], sort_pids[i], sort_pids[i] - sort_score_idx_s[i] == 775, sort_deltas[i]))
 
 
 

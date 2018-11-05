@@ -168,16 +168,16 @@ def Pair_ResNet50(resnet):
 
     for layer in resnet.layers:
         if isinstance(layer, Conv2D):
-            print 'set Conv2D weights'
+            print('set Conv2D weights')
             model.get_layer(name=layer.name).set_weights(layer.get_weights())
         elif isinstance(layer, BatchNormalization):
-            print 'set BN weights'
+            print('set BN weights')
             model.get_layer(name=layer.name).set_weights(layer.get_weights())
             model.get_layer(name=layer.name).set_weights(layer.get_weights())
             model.get_layer(name=layer.name).set_weights(layer.get_weights())
         elif len(layer.get_weights()) > 0:
-            print layer.name
-    print model.summary()
+            print(layer.name)
+    print(model.summary())
     return model
 
 

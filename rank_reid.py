@@ -8,7 +8,7 @@ from transfer.sep_bn_mix_rank_transfer import rank_transfer_2dataset
 
 def get_source_target_info(source, target):
     source_model_path = '/home/cwh/coding/rank-reid/pretrain/%s_pair_pretrain.h5' % source
-    print target
+    print(target)
     target_dataset_path = ''
     if target == 'market':
         target_dataset_path = '/home/cwh/coding/Market-1501'

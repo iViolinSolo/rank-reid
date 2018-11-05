@@ -48,7 +48,7 @@ def gt_ranking(infos):
         if i > cur_answers[-1]:
             cur_answer_index += 1
             if cur_answer_index >= 750:
-                print cur_answer_index
+                print(cur_answer_index)
             cur_answers = gt_answer_ids[cur_answer_index]
         gt_persons_ids[i].extend(cur_answers)
 

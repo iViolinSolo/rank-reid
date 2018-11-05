@@ -127,7 +127,7 @@ def rank_transfer_model(pair_model_path):
     for layer in base_model.layers:
         if isinstance(layer, BatchNormalization):
             layer.trainable = False
-    print 'to layer: %d' % (len(base_model.layers)/3*2)
+    print('to layer: %d' % (len(base_model.layers)/3*2))
 
     img0 = Input(shape=(224, 224, 3), name='img_0')
     img1 = Input(shape=(224, 224, 3), name='img_1')

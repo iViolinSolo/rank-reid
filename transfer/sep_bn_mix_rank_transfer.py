@@ -95,14 +95,14 @@ def gen_right_img_infos(cur_epoch, similar_matrix, similar_persons, left_img_ids
                         vision_matrix=None):
     pos_prop = 2
     if cur_epoch % pos_prop != 0:
-        print '\ngen_pos_right_img_ids, epoch: %d' % cur_epoch
+        print('\ngen_pos_right_img_ids, epoch: %d' % cur_epoch)
         # select from last match for negative
         left_similar_persons = similar_persons[left_img_ids]
         left_similar_matrix = similar_matrix[left_img_ids]
         right_img_ids, right_img_scores = gen_pos_right_img_ids(left_similar_persons, left_similar_matrix, batch_size)
     else:
         # select from last match for negative
-        print 'gen_neg_right_img_ids, epoch: %d' % cur_epoch
+        print('gen_neg_right_img_ids, epoch: %d' % cur_epoch)
         left_similar_persons = similar_persons[left_img_ids]
         left_similar_matrix = similar_matrix[left_img_ids]
         right_img_ids, right_img_scores = gen_neg_right_img_ids(left_similar_persons, left_similar_matrix, batch_size)
@@ -164,8 +164,8 @@ def triplet_generator_by_rank_list(train_images, batch_size, similar_persons, si
                                                                                                      train)
             sub_scores = right_img_scores1 - right_img_scores2
             cur_step += 1
-            print right_img_scores1
-            print right_img_scores2
+            print(right_img_scores1)
+            print(right_img_scores2)
             yield [left_images, right_images1, right_images2], \
                   [sub_scores, right_img_scores1, right_img_scores2]
         else:
@@ -186,8 +186,8 @@ def triplet_generator_by_rank_list(train_images, batch_size, similar_persons, si
             right_images1 = train_images[right_img_ids1]
             right_images2 = train_images[right_img_ids2]
             sub_scores = right_img_scores1 - right_img_scores2
-            print right_img_scores1
-            print right_img_scores2
+            print(right_img_scores1)
+            print(right_img_scores2)
             cur_step += 1
 
             yield [left_images, right_images1, right_images2], \
@@ -322,8 +322,8 @@ if __name__ == '__main__':
     # pair_model = load_model('../cuhk_market-rank_transfer.h5')
     base_model = pair_model.layers[3]
     base_model = Model(inputs=base_model.get_input_at(0), outputs=[base_model.get_output_at(0)], name='resnet50')
-    print isinstance(base_model.layers[-20], Conv2D)
-    print isinstance(base_model.layers[-20], BatchNormalization)
+    print(isinstance(base_model.layers[-20], Conv2D))
+    print(isinstance(base_model.layers[-20], BatchNormalization))
 
     rank_transfer_2dataset('../pretrain/cuhk_pair_pretrain.h5', '../dataset/market_train.list',
                            'rank_transfer_test.h5',
