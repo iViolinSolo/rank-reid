@@ -168,14 +168,14 @@ def gen_pos_right_img_ids(left_similar_persons, left_similar_matrix, batch_size)
 def gen_right_img_infos(cur_epoch, similar_matrix, similar_persons, left_img_ids, img_cnt, batch_size):
     pos_prop = 2
     if cur_epoch % pos_prop == 0:
-        print 'gen_pos_right_img_ids: %d' % cur_epoch
+        print('gen_pos_right_img_ids: %d' % cur_epoch)
         # select from last match for negative
         left_similar_persons = similar_persons[left_img_ids]
         left_similar_matrix = similar_matrix[left_img_ids]
         right_img_ids, right_img_scores = gen_pos_right_img_ids(left_similar_persons, left_similar_matrix, batch_size)
     else:
         # select from last match for negative
-        print 'gen_neg_right_img_ids: %d' % cur_epoch
+        print('gen_neg_right_img_ids: %d' % cur_epoch)
         left_similar_persons = similar_persons[left_img_ids]
         left_similar_matrix = similar_matrix[left_img_ids]
         right_img_ids, right_img_scores = gen_neg_right_img_ids(left_similar_persons, left_similar_matrix, batch_size)
@@ -198,7 +198,7 @@ def pair_generator_by_rank_list(train_images, batch_size, similar_persons, simil
 
         left_images = train_images[left_img_ids]
         right_images1 = train_images[right_img_ids]
-        print right_img_scores
+        print(right_img_scores)
         cur_epoch += 1
         yield [left_images, right_images1], [right_img_scores]
 
