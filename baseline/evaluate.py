@@ -190,16 +190,24 @@ def test_predict(net, probe_path, gallery_path, pid_path, score_path):
     # net = Model(inputs=[net.input], outputs=[net.get_layer('avg_pool').output])
     net = Model(inputs=[net.input], outputs=[net.get_layer('global_average_pooling2d_1').output])
 
+    print('Begin extract features ....')
     test_f, test_info = extract_feature(gallery_path, net)
     query_f, query_info = extract_feature(probe_path, net)
+
+    print('Begin sorting similarity ....')
     result, result_argsort = sort_similarity(query_f, test_f)
     for i in range(len(result)):
         result[i] = result[i][result_argsort[i]]
     result = np.array(result)
     safe_remove(pid_path)
     safe_remove(score_path)
+
+    print("Begin saving results ...")
     np.savetxt(pid_path, result_argsort, fmt='%d')
     np.savetxt(score_path, result, fmt='%.4f')
+
+    print('-='*50)
+    print('finish test_predict...')
 
 
 def train_sepbn_predict(net_path, train_path, pid_path, score_path):
@@ -235,6 +243,8 @@ def test_sepbn_predict(net_path, probe_path, gallery_path, pid_path, score_path)
 
 def market_result_eval(predict_path, log_path='market_result_eval.log', TEST='Market-1501/test',
                        QUERY='Market-1501/probe'):
+    print('-='*50)
+    print('Begin result evaluate...')
     res = np.genfromtxt(predict_path, delimiter=' ')
     print('predict info get, extract gallery info start')
     test_info = extract_info(TEST)
