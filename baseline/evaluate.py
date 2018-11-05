@@ -167,7 +167,8 @@ def map_rank_quick_eval(query_info, test_info, result_argsort):
 
 
 def train_predict(net, train_path, pid_path, score_path):
-    net = Model(inputs=[net.input], outputs=[net.get_layer('avg_pool').output])
+    # net = Model(inputs=[net.input], outputs=[net.get_layer('avg_pool').output])
+    net = Model(inputs=[net.input], outputs=[net.get_layer('global_average_pooling2d_1').output])
     train_f, test_info = extract_feature(train_path, net)
     np.savetxt(score_path.replace('renew_ac.log', 'feature.txt'), train_f, fmt='%.4f')
     result, result_argsort = sort_similarity(train_f, train_f)
@@ -186,7 +187,9 @@ def train_predict(net, train_path, pid_path, score_path):
 
 def test_predict(net, probe_path, gallery_path, pid_path, score_path):
     # net = Model(inputs=[net.get_layer('resnet50').get_input_at(0)], outputs=[net.get_layer('resnet50').get_output_at(0)])
-    net = Model(inputs=[net.input], outputs=[net.get_layer('avg_pool').output])
+    # net = Model(inputs=[net.input], outputs=[net.get_layer('avg_pool').output])
+    net = Model(inputs=[net.input], outputs=[net.get_layer('global_average_pooling2d_1').output])
+
     test_f, test_info = extract_feature(gallery_path, net)
     query_f, query_info = extract_feature(probe_path, net)
     result, result_argsort = sort_similarity(query_f, test_f)
@@ -273,12 +276,11 @@ def grid_result_eval(predict_path, log_path='grid_eval.log'):
     # print(probe_acc)
 
 
-
 if __name__ == '__main__':
     source = 'market'
     target = 'market'
     net = load_model('../pretrain/' + source + '_softmax_pretrain.h5')
-    print(net.to_json())
+    # print(net.to_json())
     target_path = '/home/xmh/dataset/Market-1501-v15.09.15/_rerank'
     probe_path = target_path + '/probe'
     gallery_path = target_path + '/test'
