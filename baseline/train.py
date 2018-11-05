@@ -95,11 +95,10 @@ def load_data(LIST, TRAIN):
     return images, labels
 
 
-def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path, use_multi_gpu: int=None):
+def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path, use_multi_gpu: int = None):
     # ========
     batch_size = 16
     n_epoch = 40
-
 
     images, labels = load_data(train_list, train_dir)
     config = tf.ConfigProto()
@@ -127,13 +126,17 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
         if type(use_multi_gpu) == int and use_multi_gpu > 1:
             net = multi_gpu_model(net, gpus=use_multi_gpu)
 
+    net.summary()
+    print('-=' * 60)
+    print('Viva la Vida')
+    print('-=' * 60)
+
     # pretrain
     # batch_size = 16
     train_cnt = len(labels)
-    train_datagen = ImageDataGenerator(
-        shear_range=0.2, width_shift_range=0.2, height_shift_range=0.2,
-        horizontal_flip=0.5).flow(
-        images[:train_cnt // 10 * 9], labels[:train_cnt // 10 * 9], batch_size=batch_size)
+    train_datagen = ImageDataGenerator(shear_range=0.2, width_shift_range=0.2, height_shift_range=0.2,
+                                       horizontal_flip=0.5).flow(images[:train_cnt // 10 * 9],
+                                                                 labels[:train_cnt // 10 * 9], batch_size=batch_size)
 
     # train_datagen = ImageDataGenerator().flow(
     #     images[:train_cnt//10*9], labels[:train_cnt//10*9], batch_size=batch_size)
@@ -142,19 +145,19 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
 
     save_best = ModelCheckpoint(target_model_path, monitor='val_acc', save_best_only=True)
     net.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
-    # net.fit_generator(
-    #     train_datagen,
-    #     steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
-    #     epochs=n_epoch,
-    #     validation_data=val_datagen,
-    #     validation_steps=int(train_cnt / 20 / batch_size + 1),
-    #     callbacks=[save_best]
-    # )
-    net.summary()
+    net.fit_generator(
+        train_datagen,
+        steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
+        epochs=n_epoch,
+        validation_data=val_datagen,
+        validation_steps=int(train_cnt / 20 / batch_size + 1),
+        callbacks=[save_best]
+    )
     net.save(target_model_path)
 
 
-def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_parent=DATASET_ROOT_PATH, multi_gpus: int=None):
+def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_parent=DATASET_ROOT_PATH,
+                                multi_gpus: int = None):
     if source == 'market':
         train_list = project_path + '/dataset/market_train.list'
         train_dir = dataset_parent + '/Market-1501-v15.09.15/_rerank/train'
@@ -188,7 +191,8 @@ def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_
         train_list = 'unknown'
         train_dir = 'unknown'
         class_count = -1
-    softmax_model_pretrain(train_list, train_dir, class_count, '../pretrain/' + source + '_softmax_pretrain.h5', use_multi_gpu=multi_gpus)
+    softmax_model_pretrain(train_list, train_dir, class_count, '../pretrain/' + source + '_softmax_pretrain.h5',
+                           use_multi_gpu=multi_gpus)
 
 
 if __name__ == '__main__':
