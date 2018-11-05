@@ -108,7 +108,10 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     set_session(sess)
 
     # load pre-trained resnet50
-    base_model = ResNet50(weights='imagenet', include_top=False, input_tensor=Input(shape=(224, 224, 3)))
+    # this is under keras 2.2.0
+    # base_model = ResNet50(weights='imagenet', include_top=False, input_tensor=Input(shape=(224, 224, 3)))
+    # this is upper than keras 2.2.0
+    base_model = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=(224, 224, 3)), pooling='avg')
 
     x = base_model.output
     x = Flatten(name='flatten')(x)
