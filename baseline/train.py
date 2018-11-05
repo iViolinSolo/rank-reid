@@ -20,6 +20,7 @@ from keras.optimizers import SGD, Adagrad
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
+from keras.utils import multi_gpu_model
 
 from baseline.img_utils import get_random_eraser, crop_generator
 from utils.const import PROJECT_ROOT_PATH, DATASET_ROOT_PATH
@@ -94,7 +95,7 @@ def load_data(LIST, TRAIN):
     return images, labels
 
 
-def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path):
+def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path, use_multi_gpu: int=None):
     # ========
     batch_size = 16
     n_epoch = 40
@@ -122,6 +123,10 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     for layer in net.layers:
         layer.trainable = True
 
+    if use_multi_gpu is not None:
+        if type(use_multi_gpu) == int and use_multi_gpu > 1:
+            net = multi_gpu_model(net, gpus=use_multi_gpu)
+
     # pretrain
     # batch_size = 16
     train_cnt = len(labels)
@@ -148,7 +153,7 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     net.save(target_model_path)
 
 
-def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_parent=DATASET_ROOT_PATH):
+def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_parent=DATASET_ROOT_PATH, multi_gpus: int=None):
     if source == 'market':
         train_list = project_path + '/dataset/market_train.list'
         train_dir = dataset_parent + '/Market-1501-v15.09.15/_rerank/train'
@@ -182,11 +187,11 @@ def softmax_pretrain_on_dataset(source, project_path=PROJECT_ROOT_PATH, dataset_
         train_list = 'unknown'
         train_dir = 'unknown'
         class_count = -1
-    softmax_model_pretrain(train_list, train_dir, class_count, '../pretrain/' + source + '_softmax_pretrain.h5')
+    softmax_model_pretrain(train_list, train_dir, class_count, '../pretrain/' + source + '_softmax_pretrain.h5', use_multi_gpu=multi_gpus)
 
 
 if __name__ == '__main__':
     # sources = ['market', 'grid', 'cuhk', 'viper']
     sources = ['market']
     for source in sources:
-        softmax_pretrain_on_dataset(source)
+        softmax_pretrain_on_dataset(source, multi_gpus=None)
