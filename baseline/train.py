@@ -24,6 +24,7 @@ from keras.utils import multi_gpu_model
 
 from baseline.img_utils import get_random_eraser, crop_generator
 from utils.const import PROJECT_ROOT_PATH, DATASET_ROOT_PATH
+from utils.hparams import img_width, img_height
 
 
 def load_mix_data(LIST, TRAIN):
@@ -41,7 +42,7 @@ def load_mix_data(LIST, TRAIN):
                 label_cnt += 1
             last_label = lbl
             last_type = cur_type
-            img = image.load_img(os.path.join(TRAIN, img), target_size=[224, 224])
+            img = image.load_img(os.path.join(TRAIN, img), target_size=[img_height, img_width])
             img = image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
             img = preprocess_input(img)
@@ -74,7 +75,7 @@ def load_data(LIST, TRAIN):
             if last_label != lbl:
                 label_cnt += 1
             last_label = lbl
-            img = image.load_img(os.path.join(TRAIN, img), target_size=[224, 224])
+            img = image.load_img(os.path.join(TRAIN, img), target_size=[img_height, img_width])
             img = image.img_to_array(img)
             img = np.expand_dims(img, axis=0)
             img = preprocess_input(img)
@@ -111,7 +112,7 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     # this is under keras 2.2.0
     # base_model = ResNet50(weights='imagenet', include_top=False, input_tensor=Input(shape=(224, 224, 3)))
     # this is upper than keras 2.2.0
-    base_model = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=(256, 128, 3)), pooling='avg')
+    base_model = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=(img_height, img_width, 3)), pooling='avg')
 
     x = base_model.output
     # x = Flatten(name='flatten')(x)
