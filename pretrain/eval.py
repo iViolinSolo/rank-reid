@@ -111,7 +111,7 @@ def market_eval(source, transform_dir):
 
 if __name__ == '__main__':
     target = 'market'
-    target_path = '/home/cwh/coding/Market-1501'
+    target_path = '/home/xmh/dataset/Market-1501-v15.09.15/_rerank'
     probe_path = target_path + '/probe'
     gallery_path = target_path + '/test'
     pid_path = 'ret_pid.txt'

@@ -288,13 +288,12 @@ def grid_result_eval(predict_path, log_path='grid_eval.log'):
 
 if __name__ == '__main__':
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
-
-
+    # os.environ["CUDA_VISIBLE_DEVICES"] = "2"
     source = 'market'
     target = 'market'
     net = load_model('../pretrain/' + source + '_softmax_pretrain.h5')
-    # print(net.to_json())
+    net.summary()
+
     target_path = '/home/xmh/dataset/Market-1501-v15.09.15/_rerank'
     probe_path = target_path + '/probe'
     gallery_path = target_path + '/test'
