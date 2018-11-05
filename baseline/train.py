@@ -95,6 +95,11 @@ def load_data(LIST, TRAIN):
 
 
 def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path):
+    # ========
+    batch_size = 16
+    n_epoch = 40
+
+
     images, labels = load_data(train_list, train_dir)
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -115,7 +120,7 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
         layer.trainable = True
 
     # pretrain
-    batch_size = 16
+    # batch_size = 16
     train_cnt = len(labels)
     train_datagen = ImageDataGenerator(
         shear_range=0.2, width_shift_range=0.2, height_shift_range=0.2,
@@ -132,7 +137,7 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     net.fit_generator(
         train_datagen,
         steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
-        epochs=40,
+        epochs=n_epoch,
         validation_data=val_datagen,
         validation_steps=int(train_cnt / 20 / batch_size + 1),
         callbacks=[save_best]
