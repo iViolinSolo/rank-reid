@@ -137,14 +137,14 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
 
     save_best = ModelCheckpoint(target_model_path, monitor='val_acc', save_best_only=True)
     net.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
-    # net.fit_generator(
-    #     train_datagen,
-    #     steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
-    #     epochs=n_epoch,
-    #     validation_data=val_datagen,
-    #     validation_steps=int(train_cnt / 20 / batch_size + 1),
-    #     callbacks=[save_best]
-    # )
+    net.fit_generator(
+        train_datagen,
+        steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
+        epochs=n_epoch,
+        validation_data=val_datagen,
+        validation_steps=int(train_cnt / 20 / batch_size + 1),
+        callbacks=[save_best]
+    )
     net.save(target_model_path)
 
 
