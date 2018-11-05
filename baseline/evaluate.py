@@ -287,6 +287,10 @@ def grid_result_eval(predict_path, log_path='grid_eval.log'):
 
 
 if __name__ == '__main__':
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+
+
     source = 'market'
     target = 'market'
     net = load_model('../pretrain/' + source + '_softmax_pretrain.h5')
