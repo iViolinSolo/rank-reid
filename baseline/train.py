@@ -114,7 +114,7 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
     base_model = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=(224, 224, 3)), pooling='avg')
 
     x = base_model.output
-    x = Flatten(name='flatten')(x)
+    # x = Flatten(name='flatten')(x)
     x = Dropout(0.5)(x)
     x = Dense(class_count, activation='softmax', name='fc8', kernel_initializer=RandomNormal(mean=0.0, stddev=0.001))(x)
     net = Model(inputs=[base_model.input], outputs=[x])
@@ -137,14 +137,14 @@ def softmax_model_pretrain(train_list, train_dir, class_count, target_model_path
 
     save_best = ModelCheckpoint(target_model_path, monitor='val_acc', save_best_only=True)
     net.compile(optimizer=SGD(lr=0.001, momentum=0.9), loss='categorical_crossentropy', metrics=['accuracy'])
-    net.fit_generator(
-        train_datagen,
-        steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
-        epochs=n_epoch,
-        validation_data=val_datagen,
-        validation_steps=int(train_cnt / 20 / batch_size + 1),
-        callbacks=[save_best]
-    )
+    # net.fit_generator(
+    #     train_datagen,
+    #     steps_per_epoch=int(train_cnt / 20 * 19 / batch_size + 1),
+    #     epochs=n_epoch,
+    #     validation_data=val_datagen,
+    #     validation_steps=int(train_cnt / 20 / batch_size + 1),
+    #     callbacks=[save_best]
+    # )
     net.save(target_model_path)
 
 
